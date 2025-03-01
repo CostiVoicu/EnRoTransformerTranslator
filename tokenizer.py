@@ -5,9 +5,9 @@ from tokenizers.pre_tokenizers import Whitespace
 
 from pathlib import Path
 
-from dataset import get_all_sentences
-
 def get_or_build_tokenizer(config, ds, lang):
+    from dataset import get_all_sentences
+    
     tokenizer_path = Path(config['tokenizer_file'].format(lang))
 
     if not Path.exists(tokenizer_path):
