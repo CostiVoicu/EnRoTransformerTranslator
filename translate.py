@@ -7,7 +7,7 @@ from pathlib import Path
 from config import get_config, get_weights_file_path
 from model import build_transformer
 
-def translate(sentence: str, epoch: str):
+def translate(sentence: str, epoch: str, print_result: bool = False):
     # Define the device, tokenizers and model
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     #print("Using device: ", device)
@@ -41,8 +41,9 @@ def translate(sentence: str, epoch: str):
         decoder_input = torch.empty(1, 1).fill_(tokenizer_tgt.token_to_id('[SOS]')).type_as(source).to(device)
 
         # Print the source sentence and target start prompt
-        print(f"{f'SOURCE: '}{sentence}")
-        print(f"{f'PREDICTED: '}", end='')
+        if print_result:
+            print(f"{f'SOURCE: '}{sentence}")
+            print(f"{f'PREDICTED: '}", end='')
 
         # Generate the translation word by word
         while decoder_input.size(1) < seq_len:
@@ -55,7 +56,8 @@ def translate(sentence: str, epoch: str):
             _, next_word = torch.max(prob, dim=1)
             decoder_input = torch.cat([decoder_input, torch.empty(1, 1).type_as(source).fill_(next_word.item()).to(device)], dim=1)
 
-            print(f"{tokenizer_tgt.decode([next_word.item()])}", end=' ')
+            if print_result:
+                print(f"{tokenizer_tgt.decode([next_word.item()])}", end=' ')
 
             if next_word == tokenizer_tgt.token_to_id('[EOS]'):
                 break

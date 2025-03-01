@@ -34,7 +34,7 @@ def get_config():
         "model_folder": "weights",
         "model_basename": "tmodel_",
         "preload": None,
-        "tokenizer_file": "tokenizer_{0}.json",
+        "tokenizer_file": "tokenizer/tokenizer_{0}.json",
         "experiment_name": "runs/tmodel_b32_lr0001_sq64_dm128"
     }
 
